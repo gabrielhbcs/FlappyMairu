@@ -7,7 +7,7 @@ mouse = Window.get_mouse()
 teclado = Window.get_keyboard()
 
 janela.set_title("Flappy Mairu")
-fundo = Sprite('fundo.png')
+fundo = Sprite('fundo game.png')
 
 estadosPossiveis = ["MENU", "GAME", "GAME OVER"]
 estadoAtual = "MENU"
@@ -17,7 +17,7 @@ velCano = 15
 
 cano = Sprite('cano.png')
 listaCanos = []
-distanciaVerticalEntreCanos = 150
+distanciaVerticalEntreCanos = 120
 distanciaEntreCanos = velCano * 20
 
 
@@ -36,23 +36,37 @@ clock = pygame.time.Clock()
 def checaClick(botao, mouse):
     return botao.x < mouse[0] and botao.x + botao.width > mouse[0] and botao.y < mouse[1] and botao.y + botao.height > mouse[1]
 
+def pintaFundo(fundo):
+    fundo.x -= velFundo * dt
+    fundo2.x -= velFundo * dt
+    if (fundo.x <= -fundo.width):
+        fundo.x = fundo.width
+    if (fundo2.x <= -fundo2.width):
+        fundo2.x = fundo2.width
+    fundo.draw()
 
 while True:
-    fundo.draw()
+
     dt = clock.tick(60)
+
+    if not estadoAtual == "GAME OVER":
+        fundo.draw()
 
     if estadoAtual == "MENU":
         if ultimoEstado != "MENU":
             player = Sprite('mairon.png')
             player.x = janela.width/8
             player.y = janela.height/2 - player.height/2
-            fundo = Sprite("fundo.png")
+            #fundo = Sprite("fundo.png")
+            #fundo.draw()
+
             ultimoEstado = "MENU"
-            fundo.draw()
+
             menu = Sprite('menu.png')
 
         if mouse.is_button_pressed(1):
             estadoAtual = "GAME"
+
 
         menu.draw()
 
@@ -111,13 +125,12 @@ while True:
 
 
 
-
-
     if estadoAtual == "GAME OVER":
         if ultimoEstado != estadoAtual:
             ultimoEstado = estadoAtual
             player = Sprite("mairon dead.png")
-            fundo = Sprite("game over.png")
+            gameOver = Sprite("game over.png")
+            gameOver.draw()
             player.x = ultimo_x
             player.y = ultimo_y
         if(not mouse.is_button_pressed(1) and mouseApertado):
@@ -126,6 +139,7 @@ while True:
             mouseApertado = True
         else:
             mouseApertado = False
+
 
 
     player.draw()
